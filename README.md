@@ -33,8 +33,4 @@ A simple **Pong game** built using C++ and SFML. This project demonstrates colli
 git clone https://github.com/Hemeshwer0001/Pong.git
 cd Pong
 g++ Pong.cpp -o Pong -lsfml-graphics -lsfml-window -lsfml-system
-./Pong```
-
-
-
-
+./Pong
