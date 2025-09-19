@@ -29,9 +29,18 @@ A simple **Pong game** built using C++ and SFML. This project demonstrates colli
    Follow the official guide: [SFML Setup](https://www.sfml-dev.org/tutorials/2.5/)
 
 2. **Clone**
-```bash git clone https://github.com/Hemeshwer0001/Pong.git```
-```bash cd Pong```
+```bash
+git clone https://github.com/Hemeshwer0001/Pong.git
+```
+```bash 
+cd Pong
+```
 4. **Compile**
-```bash g++ Pong.cpp -o Pong -lsfml-graphics -lsfml-window -lsfml-system```
-5. **Run**
-```bash ./Pong```
+```bash
+ g++ Pong.cpp -o Pong -lsfml-graphics -lsfml-window -lsfml-system
+```
+6. **Run**
+```bash
+./Pong
+```
+
