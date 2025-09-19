@@ -45,6 +45,19 @@ int main(){
     gameover.setPosition(300, 350);
     gameover.setFillColor(sf::Color::Red);
 
+    // creating a score measurer for each player
+    int score1 = 0; // game will end when either of them reaches a score of 5
+    int score2 = 0;
+    // displaying score 
+    sf::Text point1, point2;
+    point1.setCharacterSize(30);
+    point1.setPosition(100, 10);
+    point1.setFont(font);
+    point1.setFillColor(sf::Color::Blue);
+    point2 = point1;
+    point2.setFillColor(sf::Color::Cyan);
+    point2.setPosition(730, 10);
+
     while(window.isOpen()){
         float deltaTime = clock.restart().asSeconds();
 
@@ -65,11 +78,11 @@ int main(){
         else movement2.y = 0.0;
 
 
-        // forming click-listeners for p1 (s and w)
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W) && Over == false){ // w is for up
+        // p1 will be controlled using mouse
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){ // left clivk == up
             movement1.y = -400.0;
         }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) && Over == false){ // s is for down
+        else if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){ // right click == down
             movement1.y = 400.0;
         }
         else movement1.y = 0.0;
@@ -99,6 +112,8 @@ int main(){
             movement2.y = -movement2.y;
         }
 
+        float ballLeft = ball.getPosition().x;
+        float ballRight = ball.getPosition().x + ball.getRadius() * 2;
         // controlling ball
         // ball will move in both x and y axis...
         if(ball.getPosition().y > 761){
@@ -120,17 +135,24 @@ int main(){
 
                 // base speed
                 float speed = sqrt(moveX*moveX + moveY*moveY);
-                speed *= 1.1f;
+                speed *= 1.02f;
                 // bounce back to left
                 moveX = -speed * cos(offset * 0.7f);  // mostly horizontal, angle changes with offset
                 moveY = speed * sin(offset * 0.7f);   // vertical component depends on hit point
             }
             else{
-                if(ball.getPosition().x > 960){
-                    gameover.setString("Game Over!\nPlayer1 Wins");
-                    Over = true;
-                    ball.setPosition(960, ball.getPosition().y);
-                    moveX = moveY = 0;
+                if(ballRight > 1000){  
+                    score1++;
+                    if(score1 == 5){
+                        gameover.setString("Game Over!\n"+to_string(score1)+"\t:\t"+to_string(score2)+"\nPlayer1 Wins!");
+                        Over = true;
+                        ball.setPosition(960, ball.getPosition().y);
+                        moveX = moveY = 0;
+                    }
+                    else{
+                        // Reset ball near left paddle for reaction time
+                        ball.setPosition(p1.getPosition().x + 31, p1.getPosition().y + 40);
+                    }
                 }
             }
         }
@@ -143,26 +165,36 @@ int main(){
                 float offset = (ballCenterY - paddleCenterY) / (p1.getSize().y / 2.0f);
 
                 float speed = sqrt(moveX*moveX + moveY*moveY);
-
+                speed *= 1.02;
                 // bounce back to right
                 moveX = speed * cos(offset * 0.7f);
                 moveY = speed * sin(offset * 0.7f);
             }
             else{
-                if(ball.getPosition().x < 0){
-                    gameover.setString("Game Over!\nPlayer2 Wins");
-                    Over = true;
-                    ball.setPosition(1, ball.getPosition().y);
-                    moveX = moveY = 0;
+                if(ballLeft < 0){
+                    score2++;
+                    if(score2 == 5){
+                        gameover.setString("Game Over!\n"+to_string(score1)+"\t:\t"+to_string(score2)+"\nPlayer2 Wins!");
+                        Over = true;
+                        ball.setPosition(0, ball.getPosition().y);
+                        moveX = moveY = 0;
+                    }
+                    else{
+                        // Reset ball near right paddle for reaction time
+                        ball.setPosition(p2.getPosition().x - 41, p2.getPosition().y + 40);
+                    }
                 }
             }
         }
-
+        point1.setString("Player1 : "+to_string(score1));
+        point2.setString("Player2 : "+to_string(score2));
         window.clear(sf::Color::Black);
         window.draw(ball);
         window.draw(p1);
         window.draw(p2);
         window.draw(gameover);
+        window.draw(point1);
+        window.draw(point2);
         window.display();
     }
 }
