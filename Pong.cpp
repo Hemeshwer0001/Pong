@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 using namespace std;
 
 void p1Clicks(sf::Vector2f& movement1, bool& Over){
@@ -46,7 +47,7 @@ void boundP2(sf::RectangleShape& p2){ // ensuring that p2 stays in bounds
     }
 }
 
-void boundBallAndGameOver(sf::CircleShape& ball, sf::RectangleShape& p1, sf::RectangleShape& p2, sf::Text& gameover, float& moveX, float& moveY, bool& Over, int& score1, int& score2){ // ensuring that ball moves properly throught the game until GameOver
+void boundBallAndGameOver(sf::CircleShape& ball, sf::RectangleShape& p1, sf::RectangleShape& p2, sf::Text& gameover, float& moveX, float& moveY, bool& Over, int& score1, int& score2, sf::Sound& bounce){ // ensuring that ball moves properly throught the game until GameOver
     float ballLeft = ball.getPosition().x;
     float ballRight = ball.getPosition().x + ball.getRadius() * 2;
     // controlling ball
@@ -62,7 +63,7 @@ void boundBallAndGameOver(sf::CircleShape& ball, sf::RectangleShape& p1, sf::Rec
     else if(ball.getPosition().x >930){  
         if(ball.getGlobalBounds().intersects(p2.getGlobalBounds())){
             ball.setPosition(930, ball.getPosition().y);
-
+            bounce.play();
             // calculate offset (how far from paddle center the ball hit)
             float ballCenterY = ball.getPosition().y + ball.getRadius();
             float paddleCenterY = p2.getPosition().y + p2.getSize().y / 2.0f;
@@ -94,7 +95,7 @@ void boundBallAndGameOver(sf::CircleShape& ball, sf::RectangleShape& p1, sf::Rec
     else if(ball.getPosition().x < 30){
         if(ball.getGlobalBounds().intersects(p1.getGlobalBounds())){
             ball.setPosition(30, ball.getPosition().y);
-
+            bounce.play();
             float ballCenterY = ball.getPosition().y + ball.getRadius();
             float paddleCenterY = p1.getPosition().y + p1.getSize().y / 2.0f;
             float offset = (ballCenterY - paddleCenterY) / (p1.getSize().y / 2.0f);
@@ -134,6 +135,11 @@ int main(){
     sf::RenderWindow window(sf::VideoMode({1000, 800}), "Pong");
     window.setFramerateLimit(120);
     bool Over = false; // checking for GameOver
+
+    sf::SoundBuffer ballBuffer;
+    ballBuffer.loadFromFile("ball.wav");
+    sf::Sound bounce;
+    bounce.setBuffer(ballBuffer);
     
     sf::Clock clock;
     sf::CircleShape ball; // creating ball
@@ -194,7 +200,7 @@ int main(){
         // controlling p2 (ensuring bound check)
         boundP2(p2);
         // controlling ball and ensuring proper GameOver
-        boundBallAndGameOver(ball, p1, p2, gameover, moveX, moveY, Over, score1, score2);
+        boundBallAndGameOver(ball, p1, p2, gameover, moveX, moveY, Over, score1, score2, bounce);
         point1.setString("Player1 : "+to_string(score1));
         point2.setString("Player2 : "+to_string(score2));
         window.clear(sf::Color::Black);
