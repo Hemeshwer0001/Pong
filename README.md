@@ -43,4 +43,19 @@ cd Pong
 ```bash
 ./Pong
 ```
+## Controls
+- **Player1**
+  - **Player1** is controlled through **Mouse**
+  - **Left Click** -> Move Up
+  - **Right Click** -> Move Down
+- **Player2**
+  - **Player2** is controlled through **KeyBoard**
+  - **Up Arrow Key** -> Move Up
+  - **Down Arrow Key** -> Move Down
+---
 
+## Assets
+- **FreeRoyalty.ttf** -> to use fonts for displaying text on the screen
+- **ball.wav** -> to create a sound when the ball hit a paddle
+
+---
