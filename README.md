@@ -37,12 +37,13 @@ cd Pong
 ```
 4. **Compile**
 ```bash
- g++ Pong.cpp -o Pong -lsfml-graphics -lsfml-window -lsfml-system
+ g++ Pong.cpp -o Pong -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 ```
 6. **Run**
 ```bash
 ./Pong
 ```
+---
 ## Controls
 - **Player1**
   - **Player1** is controlled through **Mouse**
